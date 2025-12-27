@@ -1,0 +1,28 @@
+Summary,Issue Type,Description,Priority
+"Phase 1: MVP - 기본 자동 플레이",Epic,"단순 픽셀 감지 기반 점프 구현
+
+목표: 고정된 속도에서 선인장 10개 이상 통과
+
+주요 기능:
+- 화면 캡처 모듈 구현
+- 기본 장애물 감지 로직
+- 점프 명령 전송
+
+기술 스택: Python 3.10+, OpenCV, MSS, PyDirectInput",Highest
+"Phase 2: 고도화 - 정밀 탐지 및 보정",Epic,"익룡 탐지 및 정밀 보정
+
+목표: 다양한 장애물에 대응
+
+주요 기능:
+- 익룡(Pterodactyl) 탐지 및 숙기 기능 추가
+- 게임 속도(Pixel per Frame) 계산
+- 점프 타이밍 정밀 보정",High
+"Phase 3: 지능화 - 강화학습 에이전트",Epic,"강화 학습 기반 자율 에이전트
+
+목표: 자가 학습을 통한 성능 향상
+
+주요 기능:
+- Reinforcement Learning 환경 구축 (OpenAI Gym 커스텀 환경)
+- 인간의 기록을 넘어서는 초고속 단계에서의 생존 학습
+
+기술 스택: Stable Baselines3 (PPO/DQN)",Medium
