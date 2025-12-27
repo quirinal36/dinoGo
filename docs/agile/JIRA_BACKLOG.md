@@ -84,20 +84,23 @@
 
 | Task ID | Task Name | User Story | 담당자 | 예상시간 | 상태 |
 |---------|-----------|------------|--------|----------|------|
-| T-01 | MSS 라이브러리 설정 및 화면 캡처 모듈 구현 | US-01 | - | 4h | To Do |
-| T-02 | 캡처 영역 좌표 설정 로직 구현 | US-01 | - | 2h | To Do |
-| T-03 | FPS 측정 및 최적화 | US-01 | - | 2h | To Do |
-| T-04 | OpenCV 그레이스케일 변환 구현 | US-02 | - | 2h | To Do |
-| T-05 | Canny Edge Detection 적용 | US-02 | - | 2h | To Do |
-| T-06 | 전처리 파이프라인 통합 | US-02 | - | 2h | To Do |
-| T-07 | 공룡 앞 ROI 영역 정의 | US-03 | - | 2h | To Do |
-| T-08 | 픽셀 밀도 기반 장애물 감지 알고리즘 | US-03 | - | 4h | To Do |
-| T-09 | 거리 계산 함수 구현 | US-03 | - | 2h | To Do |
-| T-10 | PyDirectInput 환경 설정 | US-04 | - | 1h | To Do |
-| T-11 | 점프 명령 전송 함수 구현 | US-04 | - | 2h | To Do |
-| T-12 | 입력 지연 측정 및 최적화 | US-04 | - | 2h | To Do |
-| T-13 | 메인 게임 루프 통합 | - | - | 4h | To Do |
-| T-14 | 통합 테스트 및 버그 수정 | - | - | 4h | To Do |
+| T-01 | MSS 라이브러리 설정 및 화면 캡처 모듈 구현 | US-01 | Claude | 4h | ✅ Done |
+| T-02 | 캡처 영역 좌표 설정 로직 구현 | US-01 | Claude | 2h | ✅ Done |
+| T-03 | FPS 측정 및 최적화 | US-01 | Claude | 2h | ✅ Done |
+| T-04 | OpenCV 그레이스케일 변환 구현 | US-02 | Claude | 2h | ✅ Done |
+| T-05 | Canny Edge Detection 적용 | US-02 | Claude | 2h | ✅ Done |
+| T-06 | 전처리 파이프라인 통합 | US-02 | Claude | 2h | ✅ Done |
+| T-07 | 공룡 앞 ROI 영역 정의 | US-03 | Claude | 2h | ✅ Done |
+| T-08 | 픽셀 밀도 기반 장애물 감지 알고리즘 | US-03 | Claude | 4h | ✅ Done |
+| T-09 | 거리 계산 함수 구현 | US-03 | Claude | 2h | ✅ Done |
+| T-10 | PyDirectInput 환경 설정 | US-04 | Claude | 1h | ✅ Done |
+| T-11 | 점프 명령 전송 함수 구현 | US-04 | Claude | 2h | ✅ Done |
+| T-12 | 입력 지연 측정 및 최적화 | US-04 | Claude | 2h | ✅ Done |
+| T-13 | 메인 게임 루프 통합 | - | Claude | 4h | ✅ Done |
+| T-14 | 통합 테스트 및 버그 수정 | - | Claude | 4h | ✅ Done |
+
+> **Phase 1 완료일**: 2025-12-27
+> **구현 파일**: `src/capture/`, `src/preprocessing/`, `src/detection/`, `src/control/`, `src/game_loop.py`
 
 ---
 

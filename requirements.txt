@@ -1,0 +1,21 @@
+# AI T-Rex Runner Automator - Dependencies
+# Phase 1: MVP
+
+# Core Dependencies
+numpy>=1.21.0
+opencv-python>=4.5.0
+mss>=6.0.0
+
+# Keyboard Control (cross-platform)
+pyautogui>=0.9.53
+
+# Windows-specific (optional, for lower latency)
+# Uncomment if running on Windows:
+# pydirectinput>=1.0.4
+
+# Development & Testing
+pytest>=7.0.0
+pytest-cov>=3.0.0
+
+# Atlassian Integration (already installed)
+atlassian-python-api>=3.0.0
