@@ -1,0 +1,126 @@
+name: Jira Integration
+
+on:
+  pull_request:
+    types: [opened, edited, closed, reopened]
+  push:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+
+jobs:
+  jira-transition:
+    name: Update Jira Issues
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract Jira Issue Keys from PR/Commit
+        id: extract
+        run: |
+          # Extract issue keys from PR title, branch name, or commit message
+          ISSUE_KEYS=""
+
+          # From PR title
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            PR_TITLE="${{ github.event.pull_request.title }}"
+            ISSUE_KEYS=$(echo "$PR_TITLE" | grep -oE '(DIN-[0-9]+)' | sort -u | tr '\n' ',' | sed 's/,$//')
+          fi
+
+          # From branch name
+          BRANCH_NAME="${{ github.head_ref || github.ref_name }}"
+          BRANCH_ISSUES=$(echo "$BRANCH_NAME" | grep -oE '(DIN-[0-9]+)' | sort -u | tr '\n' ',' | sed 's/,$//')
+
+          # Combine
+          ALL_ISSUES=$(echo "$ISSUE_KEYS,$BRANCH_ISSUES" | tr ',' '\n' | sort -u | tr '\n' ',' | sed 's/,$//')
+
+          echo "issues=$ALL_ISSUES" >> $GITHUB_OUTPUT
+          echo "Found Jira issues: $ALL_ISSUES"
+
+      - name: Transition to In Progress (PR opened)
+        if: github.event_name == 'pull_request' && github.event.action == 'opened' && steps.extract.outputs.issues != ''
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+        run: |
+          IFS=',' read -ra ISSUES <<< "${{ steps.extract.outputs.issues }}"
+          for ISSUE in "${ISSUES[@]}"; do
+            echo "Transitioning $ISSUE to In Progress..."
+            # Add transition logic here
+          done
+
+      - name: Add PR Comment to Jira (PR opened)
+        if: github.event_name == 'pull_request' && github.event.action == 'opened' && steps.extract.outputs.issues != ''
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+        run: |
+          IFS=',' read -ra ISSUES <<< "${{ steps.extract.outputs.issues }}"
+          for ISSUE in "${ISSUES[@]}"; do
+            PR_URL="${{ github.event.pull_request.html_url }}"
+            PR_TITLE="${{ github.event.pull_request.title }}"
+
+            COMMENT="🔀 Pull Request created: [$PR_TITLE]($PR_URL)"
+
+            # Use curl to add comment to Jira
+            curl -X POST \
+              -H "Content-Type: application/json" \
+              -u "$JIRA_USER_EMAIL:$JIRA_API_TOKEN" \
+              -d "{\"body\": \"$COMMENT\"}" \
+              "$JIRA_BASE_URL/rest/api/3/issue/$ISSUE/comment"
+
+            echo "Added comment to $ISSUE"
+          done
+
+      - name: Transition to Done (PR merged)
+        if: github.event_name == 'pull_request' && github.event.pull_request.merged == true && steps.extract.outputs.issues != ''
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+        run: |
+          IFS=',' read -ra ISSUES <<< "${{ steps.extract.outputs.issues }}"
+          for ISSUE in "${ISSUES[@]}"; do
+            echo "Transitioning $ISSUE to Done..."
+            # Add transition logic here
+          done
+
+  update-confluence:
+    name: Update Confluence Documentation
+    runs-on: ubuntu-latest
+    needs: jira-transition
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install atlassian-python-api requests
+
+      - name: Update Confluence Page
+        env:
+          ATLASSIAN_SITE: ${{ secrets.ATLASSIAN_SITE }}
+          ATLASSIAN_USER_EMAIL: ${{ secrets.ATLASSIAN_USER_EMAIL }}
+          ATLASSIAN_API_TOKEN: ${{ secrets.ATLASSIAN_API_TOKEN }}
+        run: |
+          python3 scripts/confluence_cli.py sync --type overview --project DIN --space DIN
+
+      - name: Notify Success
+        if: success()
+        run: echo "✅ Confluence documentation updated successfully"
+
+      - name: Notify Failure
+        if: failure()
+        run: echo "❌ Failed to update Confluence documentation"

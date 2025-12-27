@@ -1,0 +1,17 @@
+#!/bin/bash
+# Jira CLI Wrapper
+# Easy-to-use wrapper for Jira automation commands
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+
+# Load environment variables
+export ATLASSIAN_SITE=$(python3 -c "import json; config=json.load(open('$PROJECT_ROOT/.mcp.json')); print(config['mcpServers']['atlassian']['env']['ATLASSIAN_SITE'])" 2>/dev/null)
+export ATLASSIAN_USER_EMAIL=$(python3 -c "import json; config=json.load(open('$PROJECT_ROOT/.mcp.json')); print(config['mcpServers']['atlassian']['env']['ATLASSIAN_USER_EMAIL'])" 2>/dev/null)
+export ATLASSIAN_API_TOKEN=$(python3 -c "import json; config=json.load(open('$PROJECT_ROOT/.mcp.json')); print(config['mcpServers']['atlassian']['env']['ATLASSIAN_API_TOKEN'])" 2>/dev/null)
+
+# Activate virtual environment
+source "$PROJECT_ROOT/venv/bin/activate" 2>/dev/null || true
+
+# Run Jira CLI
+python3 "$SCRIPT_DIR/jira_cli.py" "$@"

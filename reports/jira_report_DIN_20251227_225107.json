@@ -1,0 +1,21 @@
+{
+  "project": "DIN",
+  "generated_at": "2025-12-27T22:51:07.651265",
+  "summary": {
+    "total_active": 100,
+    "blocked_count": 0,
+    "overdue_count": 0
+  },
+  "epics": [],
+  "issues_by_status": {
+    "해야 할 일": 100
+  },
+  "issues_by_priority": {
+    "Low": 4,
+    "Medium": 36,
+    "High": 59,
+    "Highest": 1
+  },
+  "blocked": [],
+  "overdue": []
+}

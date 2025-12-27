@@ -6,7 +6,7 @@
       "env": {
         "ATLASSIAN_SITE": "letscoding.atlassian.net",
         "ATLASSIAN_USER_EMAIL": "turboguy36",
-        "ATLASSIAN_API_TOKEN": "YOUR_API_TOKEN_HERE"
+        "ATLASSIAN_API_TOKEN": ""
       }
     }
   }
